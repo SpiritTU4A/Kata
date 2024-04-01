@@ -7,6 +7,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"errors"
 )
 
 func Input() string {
@@ -169,7 +170,7 @@ func RomOperation(operands, operation string) string {
 		if num1-num2 >= 1 {
 			return FromIntToRom(num1 - num2)
 		} else {
-			return "Выдача паники, так как в римской системе нет отрицательных чисел."
+			panic(errors.New("В римской системе нет отрицательных чисел."))
 		}
 	}
 	if operation == "*" {
@@ -179,7 +180,7 @@ func RomOperation(operands, operation string) string {
 		if num1/num2 >= 1 {
 			return FromIntToRom(num1 / num2)
 		} else {
-			return "Не сказано что выводить в случае, если результат деления римских цифр меньше единицы."
+			panic(errors.New("Не сказано что выводить в случае, если результат деления римских цифр меньше единицы."))
 		}
 	}
 	return "You are never to see this string in console, it seems it called \"syntaxyx sugar\":)"
@@ -210,12 +211,10 @@ func main() {
 		goal := Input()
 		operation, countOfOperation := CheckTypeOfOperation(goal)
 		if operation == "Err" && countOfOperation == 0 {
-			fmt.Println("Выдача паники, так как строка не является математической операцией.")
-			continue
+			panic(errors.New("Cтрока не является математической операцией."))
 		}
 		if countOfOperation > 1 {
-			fmt.Println("Выдача паники, так как формат математической операции не удовлетворяет заданию — два операнда и один оператор (+, -, /, *).")
-			continue
+			panic(errors.New("Формат математической операции не удовлетворяет заданию — два операнда и один оператор (+, -, /, *)."))
 		}
 		typeOfSys := RomOrArabAndCheckForCorrect(EliminationFromOperation(goal))
 		if typeOfSys == "Rom" {
@@ -225,9 +224,9 @@ func main() {
 			operands := EliminationFromOperation(goal)
 			Output(ArabOperation(operands, operation))
 		} else if typeOfSys == "incorrect" {
-			Output("Выдача паники, некорректный ввод числа.")
+			panic(errors.New("Некорректный ввод числа."))
 		} else if typeOfSys == "Err" {
-			Output("Выдача паники, так как используются одновременно разные системы счисленияMAIN.")
+			panic(errors.New("Используются одновременно разные системы счисления."))
 		}
 	}
 }
